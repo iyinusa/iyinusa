@@ -1,0 +1,24 @@
+#isg-hidden-menu {
+    display: block;
+}
+.isg-hamburger {
+    display: none;
+}
+.isg-menu a {
+    transform-origin: 0%;
+}
+
+.isg-menu li {
+    perspective: none;
+}
+
+.isg-menu a:after {
+    display: none;
+}
+
+.isg-menu li:hover a,
+.isg-menu li.current a {
+    -webkit-transform: translateZ(0) translateY(0) rotateX(0deg);
+    transform: translateZ(0) translateY(0) rotateX(0deg);
+    color: inherit;
+}
