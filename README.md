@@ -46,7 +46,7 @@
 <img alt="" src="https://www.sonarqube.org/assets/logo-31ad3115b1b4b120f3d1efd63e6b13ac9f1f89437f0cf6881cc4d8b5603a52b4.svg" width="70px"/> 
 
 **My Stats** <br/>
-[![GitHub Streak](http://github-readme-streak-stats.herokuapp.com?user=iyinusa)](https://iyinusa.com)
+[![GitHub Streak](http://github-readme-streak-stats.herokuapp.com?user=iyinusa)](https://git.io/streak-stats)
 
 <!---
 iyinusa/iyinusa is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
