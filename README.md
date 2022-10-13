@@ -1,4 +1,4 @@
-## Hi 👋, I'm [Kennedy Yinusa](https://iyinusa.com)
+## Hi 👋, I'm [Kennedy](https://iyinusa.com)
 
 - 👀 I’m interested in project collaboration
 - 🌱 I’m currently learning FaunaDB and Python
