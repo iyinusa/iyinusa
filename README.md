@@ -3,7 +3,7 @@
 - 👀 I’m interested in project collaboration
 - 🌱 I’m currently learning FaunaDB and Python
 - 💞️ I’m looking to collaborate on any Web3.0/MetaVerse project
-- 📫 You can reach me via [Email](mailto:iyinusa@yahoo.co.uk) or [Skype](https://skype:yinuken?chat)
+- 📫 You can reach me via [Email](mailto:iyinusa@yahoo.co.uk) or [Skype](https://join.skype.com/invite/sIVlwi2UIPTO)
 
 ## My Stacks
 **Backend** <br/>
