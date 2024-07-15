@@ -7,6 +7,7 @@
 
 ## My Stacks
 **Backend** <br/>
+<img alt="" src="https://img.icons8.com/13441/python.png" width="40px"/>
 <img alt="" src="https://img.icons8.com/officel/344/php-logo.png" width="40px"/>
 <img alt="" src="https://img.icons8.com/external-tal-revivo-color-tal-revivo/344/external-codeigniter-is-an-open-source-software-rapid-development-web-framework-logo-color-tal-revivo.png" width="40px"/>
 <img alt="" src="https://img.icons8.com/color/344/api-settings.png" width="40px"/>
