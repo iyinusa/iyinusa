@@ -739,8 +739,10 @@ class AwardsCarousel {
     this.isTransitioning = true;
     console.log(`Updating carousel to slide ${this.currentSlide}`);
     
-    const translateX = -this.currentSlide * 100;
-    this.track.style.transform = `translateX(${translateX}%)`;
+    // Calculate translateX based on card width (350px) plus gap (20px)
+    const cardWidth = 370; // 350px card width + 20px gap
+    const translateX = -this.currentSlide * cardWidth;
+    this.track.style.transform = `translateX(${translateX}px)`;
     
     // Update dots
     const dots = this.dotsContainer?.querySelectorAll('.dot');
