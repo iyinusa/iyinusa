@@ -569,3 +569,311 @@ if (typeof module !== 'undefined' && module.exports) {
     debounce
   };
 }
+
+// ===== AWARDS CAROUSEL FUNCTIONALITY =====
+class AwardsCarousel {
+  constructor() {
+    this.carousel = document.getElementById('awardsCarousel');
+    this.track = document.getElementById('carouselTrack');
+    this.slides = this.track?.querySelectorAll('.carousel-slide');
+    this.prevBtn = document.getElementById('prevBtn');
+    this.nextBtn = document.getElementById('nextBtn');
+    this.dotsContainer = document.getElementById('carouselDots');
+    
+    this.currentSlide = 0;
+    this.totalSlides = this.slides?.length || 0;
+    this.autoPlayInterval = null;
+    this.isTransitioning = false;
+    this.autoPlayDelay = 4000; // 4 seconds
+    this.isAutoPlayPaused = false;
+    
+    console.log('Carousel initialized:', {
+      totalSlides: this.totalSlides,
+      hasCarousel: !!this.carousel,
+      hasTrack: !!this.track
+    });
+    
+    if (this.carousel && this.totalSlides > 0) {
+      this.init();
+    }
+  }
+  
+  init() {
+    console.log('Initializing carousel...');
+    this.createDots();
+    this.addEventListeners();
+    this.updateCarousel();
+    this.startAutoPlay();
+    this.addTouchSupport();
+    this.addIntersectionObserver();
+  }
+  
+  createDots() {
+    if (!this.dotsContainer) return;
+    
+    this.dotsContainer.innerHTML = '';
+    for (let i = 0; i < this.totalSlides; i++) {
+      const dot = document.createElement('div');
+      dot.classList.add('dot');
+      if (i === 0) dot.classList.add('active');
+      dot.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.goToSlide(i);
+      });
+      this.dotsContainer.appendChild(dot);
+    }
+    console.log(`Created ${this.totalSlides} dots`);
+  }
+  
+  addEventListeners() {
+    if (this.prevBtn) {
+      this.prevBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Previous button clicked');
+        this.prevSlide();
+      });
+    }
+    
+    if (this.nextBtn) {
+      this.nextBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Next button clicked');
+        this.nextSlide();
+      });
+    }
+    
+    // Pause auto-play on hover
+    if (this.carousel) {
+      this.carousel.addEventListener('mouseenter', () => {
+        console.log('Mouse entered carousel - pausing autoplay');
+        this.isAutoPlayPaused = true;
+        this.stopAutoPlay();
+      });
+      
+      this.carousel.addEventListener('mouseleave', () => {
+        console.log('Mouse left carousel - resuming autoplay');
+        this.isAutoPlayPaused = false;
+        this.startAutoPlay();
+      });
+    }
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (this.isCarouselVisible() && !this.isTransitioning) {
+        if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          this.prevSlide();
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          this.nextSlide();
+        }
+      }
+    });
+  }
+  
+  addTouchSupport() {
+    if (!this.carousel) return;
+    
+    let startX = 0;
+    let currentX = 0;
+    let isDragging = false;
+    
+    this.carousel.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+      isDragging = true;
+      this.isAutoPlayPaused = true;
+      this.stopAutoPlay();
+    }, { passive: true });
+    
+    this.carousel.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      currentX = e.touches[0].clientX;
+    }, { passive: true });
+    
+    this.carousel.addEventListener('touchend', () => {
+      if (!isDragging) return;
+      
+      const diffX = startX - currentX;
+      const threshold = 50;
+      
+      if (Math.abs(diffX) > threshold) {
+        if (diffX > 0) {
+          this.nextSlide();
+        } else {
+          this.prevSlide();
+        }
+      }
+      
+      isDragging = false;
+      this.isAutoPlayPaused = false;
+      this.startAutoPlay();
+    }, { passive: true });
+  }
+  
+  addIntersectionObserver() {
+    if (!window.IntersectionObserver || !this.carousel) return;
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          if (!this.isAutoPlayPaused) {
+            this.startAutoPlay();
+          }
+        } else {
+          this.stopAutoPlay();
+        }
+      });
+    }, { threshold: 0.5 });
+    
+    observer.observe(this.carousel);
+  }
+  
+  updateCarousel() {
+    if (!this.track || this.isTransitioning) {
+      console.log('Cannot update carousel - track missing or transitioning');
+      return;
+    }
+    
+    this.isTransitioning = true;
+    console.log(`Updating carousel to slide ${this.currentSlide}`);
+    
+    const translateX = -this.currentSlide * 100;
+    this.track.style.transform = `translateX(${translateX}%)`;
+    
+    // Update dots
+    const dots = this.dotsContainer?.querySelectorAll('.dot');
+    if (dots) {
+      dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === this.currentSlide);
+      });
+    }
+    
+    // Update button states (for non-looping behavior)
+    // Since we want looping, we'll keep buttons always enabled
+    if (this.prevBtn) {
+      this.prevBtn.disabled = false;
+    }
+    if (this.nextBtn) {
+      this.nextBtn.disabled = false;
+    }
+    
+    // Reset transition flag after animation
+    setTimeout(() => {
+      this.isTransitioning = false;
+      console.log('Transition completed');
+    }, 600);
+    
+    // Trigger slide animations
+    this.animateSlideContent();
+  }
+  
+  animateSlideContent() {
+    const currentSlideEl = this.slides[this.currentSlide];
+    if (!currentSlideEl) return;
+    
+    const awardCards = currentSlideEl.querySelectorAll('.award-card');
+    
+    awardCards.forEach((card, index) => {
+      card.style.animation = 'none';
+      setTimeout(() => {
+        card.style.animation = `slideInUp 0.6s ease-out ${index * 0.1}s both`;
+      }, 100);
+    });
+  }
+  
+  nextSlide() {
+    if (this.isTransitioning) {
+      console.log('Transition in progress, ignoring next slide');
+      return;
+    }
+    
+    console.log(`Moving to next slide from ${this.currentSlide}`);
+    // Looping behavior: go to first slide after last
+    this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
+    this.updateCarousel();
+  }
+  
+  prevSlide() {
+    if (this.isTransitioning) {
+      console.log('Transition in progress, ignoring prev slide');
+      return;
+    }
+    
+    console.log(`Moving to previous slide from ${this.currentSlide}`);
+    // Looping behavior: go to last slide before first
+    this.currentSlide = this.currentSlide === 0 ? this.totalSlides - 1 : this.currentSlide - 1;
+    this.updateCarousel();
+  }
+  
+  goToSlide(index) {
+    if (this.isTransitioning || index === this.currentSlide || index < 0 || index >= this.totalSlides) {
+      console.log('Cannot go to slide:', { index, current: this.currentSlide, transitioning: this.isTransitioning });
+      return;
+    }
+    
+    console.log(`Going directly to slide ${index}`);
+    this.currentSlide = index;
+    this.updateCarousel();
+  }
+  
+  startAutoPlay() {
+    if (this.isAutoPlayPaused || this.totalSlides <= 1) {
+      console.log('AutoPlay not started - paused or single slide');
+      return;
+    }
+    
+    this.stopAutoPlay();
+    console.log('Starting autoplay...');
+    this.autoPlayInterval = setInterval(() => {
+      if (!this.isAutoPlayPaused && this.isCarouselVisible()) {
+        console.log('AutoPlay: moving to next slide');
+        this.nextSlide();
+      }
+    }, this.autoPlayDelay);
+  }
+  
+  stopAutoPlay() {
+    if (this.autoPlayInterval) {
+      console.log('Stopping autoplay');
+      clearInterval(this.autoPlayInterval);
+      this.autoPlayInterval = null;
+    }
+  }
+  
+  isCarouselVisible() {
+    if (!this.carousel) return false;
+    const rect = this.carousel.getBoundingClientRect();
+    return rect.top < window.innerHeight && rect.bottom > 0;
+  }
+  
+  destroy() {
+    this.stopAutoPlay();
+    // Remove event listeners if needed
+  }
+}
+
+// Initialize carousel when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('DOM loaded, initializing carousel...');
+  // Wait a bit to ensure all elements are rendered
+  setTimeout(() => {
+    window.awardsCarousel = new AwardsCarousel();
+  }, 500);
+});
+
+// Reinitialize carousel on resize
+window.addEventListener('resize', debounce(() => {
+  if (window.awardsCarousel) {
+    console.log('Window resized, updating carousel...');
+    window.awardsCarousel.updateCarousel();
+  }
+}, 250));
+
+// Clean up on page unload
+window.addEventListener('beforeunload', () => {
+  if (window.awardsCarousel) {
+    window.awardsCarousel.destroy();
+  }
+});
