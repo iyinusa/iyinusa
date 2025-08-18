@@ -1259,10 +1259,6 @@ body {
     padding-left: 3rem;
   }
   
-  .timeline-marker {
-    left: 0.1rem;
-  }
-  
   .skills-grid {
     grid-template-columns: 1fr;
   }
@@ -1312,7 +1308,11 @@ body {
   }
   
   .hero-subtitle {
-    font-size: 1.2rem;
+    font-size: 1.0rem;
+  }
+
+  .hero-description {
+    padding: 1.5rem;
   }
   
   .section-title {
@@ -1339,7 +1339,7 @@ body {
   }
 
   .timeline-marker {
-    left: 1rem;
+    left: -0.5rem;
   }
 
   .publication-card,
@@ -1353,5 +1353,338 @@ body {
     width: 50px;
     height: 50px;
     font-size: 1.2rem;
+  }
+}
+
+/* ===== AWARDS CAROUSEL STYLES ===== */
+.awards-carousel-container {
+  width: 100%;
+  padding: 60px 20px 80px;
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.awards-carousel-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(49, 130, 206, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 50%, rgba(66, 153, 225, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.awards-carousel {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 20px;
+  background: var(--bg-primary);
+  box-shadow: var(--shadow-xl);
+  backdrop-filter: blur(10px);
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  width: 100%;
+  gap: 20px;
+}
+
+.carousel-slide {
+  min-width: 350px;
+  max-width: 350px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  background: var(--bg-primary);
+  position: relative;
+  overflow: hidden;
+  border-radius: 15px;
+  box-shadow: var(--shadow-md);
+}
+
+.carousel-slide::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, 
+    rgba(49, 130, 206, 0.05) 0%, 
+    rgba(66, 153, 225, 0.03) 50%, 
+    rgba(49, 130, 206, 0.05) 100%);
+  z-index: 0;
+}
+
+.award-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0;
+  background: var(--bg-secondary);
+  border-radius: 15px;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  z-index: 1;
+  transition: all var(--transition-normal);
+  border: 2px solid transparent;
+  overflow: hidden;
+}
+
+.award-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--blue-light);
+}
+
+.award-image {
+  width: 100%;
+  height: 250px;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: none;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--blue-primary), var(--blue-secondary));
+  margin: 0;
+}
+
+.award-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+
+
+.award-info {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.award-info h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  line-height: 1.2;
+  background: linear-gradient(135deg, var(--blue-primary), var(--blue-secondary));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.award-info p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 60px;
+  height: 60px;
+  background: rgba(49, 130, 206, 0.9);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-lg);
+  z-index: 10;
+  backdrop-filter: blur(10px);
+}
+
+.carousel-btn:hover {
+  background: var(--blue-primary);
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: var(--shadow-xl);
+}
+
+.carousel-btn:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.carousel-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: translateY(-50%) scale(0.9);
+}
+
+.prev-btn {
+  left: 20px;
+}
+
+.next-btn {
+  right: 20px;
+}
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 30px 0 0;
+  background: var(--bg-primary);
+}
+
+.dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.dot::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transition: left 0.5s ease;
+}
+
+.dot:hover::before {
+  left: 100%;
+}
+
+.dot.active {
+  background: var(--blue-primary);
+  transform: scale(1.2);
+  box-shadow: 0 0 20px rgba(49, 130, 206, 0.4);
+}
+
+/* Animations */
+@keyframes pulse {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.award-card {
+  animation: slideInUp 0.6s ease-out;
+}
+
+.award-card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.award-card:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .awards-carousel-container {
+    padding: 40px 15px 60px;
+  }
+  
+  .carousel-slide {
+    padding: 30px 20px;
+    gap: 15px;
+  }
+  
+  .award-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .award-image {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .award-info h4 {
+    font-size: 1.25rem;
+  }
+  
+  .award-info p {
+    font-size: 0.9rem;
+  }
+  
+  .carousel-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+  
+  .prev-btn {
+    left: 15px;
+  }
+  
+  .next-btn {
+    right: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-slide {
+    padding: 20px 15px;
+  }
+  
+  .award-card {
+    padding: 15px;
+  }
+  
+  .award-image {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .award-info h4 {
+    font-size: 1.1rem;
+  }
+  
+  .award-info p {
+    font-size: 0.85rem;
+  }
+  
+  .carousel-btn {
+    width: 45px;
+    height: 45px;
+    font-size: 1.1rem;
+  }
+  
+  .prev-btn {
+    left: 10px;
+  }
+  
+  .next-btn {
+    right: 10px;
   }
 }
