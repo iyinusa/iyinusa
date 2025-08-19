@@ -43,6 +43,9 @@ function initializeApp() {
   
   // Initialize smooth scrolling
   initializeSmoothScrolling();
+  
+  // Initialize carousel swipe functionality
+  setTimeout(initializeCarouselSwipe, 100);
 }
 
 // ===== EVENT LISTENERS =====
@@ -571,4 +574,216 @@ if (typeof module !== 'undefined' && module.exports) {
 }
 
 // ===== AWARDS CAROUSEL FUNCTIONALITY =====
+function initializeCarouselSwipe() {
+  const carouselContainer = document.getElementById('global-recognitions');
+  const sliderInputs = document.querySelectorAll('.wgh-slider-target');
+  
+  if (!carouselContainer || sliderInputs.length === 0) return;
+  
+  let currentIndex = 0;
+  let startX = 0;
+  let startY = 0;
+  let isDragging = false;
+  let dragThreshold = 50; // Minimum distance for a swipe
+  
+  // Find the currently checked input
+  sliderInputs.forEach((input, index) => {
+    if (input.checked) {
+      currentIndex = index;
+    }
+  });
+  
+  // Function to activate a specific slide with visual feedback
+  function activateSlide(index) {
+    if (index >= 0 && index < sliderInputs.length) {
+      sliderInputs[currentIndex].checked = false;
+      sliderInputs[index].checked = true;
+      currentIndex = index;
+      
+      // Add smooth transition feedback
+      carouselContainer.style.transition = 'transform 0.3s ease-out';
+      setTimeout(() => {
+        carouselContainer.style.transition = '';
+      }, 300);
+    }
+  }
+  
+  // Function to go to next slide
+  function nextSlide() {
+    const nextIndex = (currentIndex + 1) % sliderInputs.length;
+    activateSlide(nextIndex);
+  }
+  
+  // Function to go to previous slide
+  function prevSlide() {
+    const prevIndex = (currentIndex - 1 + sliderInputs.length) % sliderInputs.length;
+    activateSlide(prevIndex);
+  }
+  
+  // Touch event handlers
+  function handleTouchStart(e) {
+    const touch = e.touches[0];
+    startX = touch.clientX;
+    startY = touch.clientY;
+    isDragging = true;
+    
+    // Add visual feedback
+    carouselContainer.classList.add('swiping');
+  }
+  
+  function handleTouchMove(e) {
+    if (!isDragging) return;
+    
+    const touch = e.touches[0];
+    const deltaX = touch.clientX - startX;
+    const deltaY = touch.clientY - startY;
+    
+    // Prevent scrolling only if it's a horizontal swipe
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      e.preventDefault();
+    }
+  }
+  
+  function handleTouchEnd(e) {
+    if (!isDragging) return;
+    
+    const touch = e.changedTouches[0];
+    const endX = touch.clientX;
+    const endY = touch.clientY;
+    const deltaX = endX - startX;
+    const deltaY = endY - startY;
+    
+    // Remove visual feedback
+    carouselContainer.classList.remove('swiping');
+    
+    // Check if it's a horizontal swipe (not vertical scroll)
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > dragThreshold) {
+      if (deltaX > 0) {
+        // Swipe right - go to previous slide
+        prevSlide();
+      } else {
+        // Swipe left - go to next slide
+        nextSlide();
+      }
+    }
+    
+    isDragging = false;
+  }
+  
+  // Mouse event handlers for desktop
+  function handleMouseDown(e) {
+    // Only respond to left mouse button
+    if (e.button !== 0) return;
+    
+    startX = e.clientX;
+    startY = e.clientY;
+    isDragging = true;
+    
+    // Add visual feedback
+    carouselContainer.classList.add('swiping');
+    carouselContainer.style.cursor = 'grabbing';
+    
+    // Prevent default to avoid text selection
+    e.preventDefault();
+  }
+  
+  function handleMouseMove(e) {
+    if (!isDragging) return;
+    
+    const deltaX = e.clientX - startX;
+    const deltaY = e.clientY - startY;
+    
+    // Only prevent default for horizontal movements
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      e.preventDefault();
+    }
+  }
+  
+  function handleMouseUp(e) {
+    if (!isDragging) return;
+    
+    const endX = e.clientX;
+    const endY = e.clientY;
+    const deltaX = endX - startX;
+    const deltaY = endY - startY;
+    
+    // Remove visual feedback
+    carouselContainer.classList.remove('swiping');
+    carouselContainer.style.cursor = 'grab';
+    
+    // Check if it's a horizontal drag (not vertical)
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > dragThreshold) {
+      if (deltaX > 0) {
+        // Drag right - go to previous slide
+        prevSlide();
+      } else {
+        // Drag left - go to next slide
+        nextSlide();
+      }
+    }
+    
+    isDragging = false;
+  }
+  
+  function handleMouseLeave() {
+    if (isDragging) {
+      carouselContainer.classList.remove('swiping');
+      carouselContainer.style.cursor = 'grab';
+      isDragging = false;
+    }
+  }
+  
+  // Add touch event listeners with passive: false for preventDefault
+  carouselContainer.addEventListener('touchstart', handleTouchStart, { passive: false });
+  carouselContainer.addEventListener('touchmove', handleTouchMove, { passive: false });
+  carouselContainer.addEventListener('touchend', handleTouchEnd, { passive: false });
+  
+  // Add mouse event listeners for desktop
+  carouselContainer.addEventListener('mousedown', handleMouseDown);
+  carouselContainer.addEventListener('mousemove', handleMouseMove);
+  carouselContainer.addEventListener('mouseup', handleMouseUp);
+  carouselContainer.addEventListener('mouseleave', handleMouseLeave);
+  
+  // Set initial cursor style
+  carouselContainer.style.cursor = 'grab';
+  
+  // Optional: Add keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    // Only handle keyboard navigation when carousel is in viewport and focused
+    const rect = carouselContainer.getBoundingClientRect();
+    const isInViewport = rect.top >= -100 && rect.bottom <= window.innerHeight + 100;
+    
+    if (isInViewport && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        nextSlide();
+      }
+    }
+  });
+  
+  // Add focus management for accessibility
+  carouselContainer.setAttribute('tabindex', '0');
+  carouselContainer.setAttribute('role', 'region');
+  carouselContainer.setAttribute('aria-label', 'Awards and recognitions carousel');
+  
+  // Handle focus events
+  carouselContainer.addEventListener('focus', () => {
+    carouselContainer.style.outline = '2px solid var(--accent-primary)';
+    carouselContainer.style.outlineOffset = '4px';
+  });
+  
+  carouselContainer.addEventListener('blur', () => {
+    carouselContainer.style.outline = '';
+    carouselContainer.style.outlineOffset = '';
+  });
+}
+
+// Initialize carousel swipe functionality when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  // Add a small delay to ensure all elements are properly loaded
+  setTimeout(initializeCarouselSwipe, 100);
+});
 

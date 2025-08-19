@@ -48,4 +48,10 @@
         <priority>0.80</priority>
         <changefreq>monthly</changefreq>
     </url>
+    <url>
+        <loc>https://iyinusa.com/#global-recognitions</loc>
+        <lastmod>2025-08-19T00:00:00+00:00</lastmod>
+        <priority>0.9</priority>
+        <changefreq>monthly</changefreq>
+    </url>
 </urlset>
