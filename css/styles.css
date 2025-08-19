@@ -1739,3 +1739,91 @@ input.wgh-slider-target {
     font-size: 10px;
   }
 }
+
+/* ===== CAROUSEL SWIPE ENHANCEMENT STYLES ===== */
+.awards-carousel-container {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  touch-action: pan-y pinch-zoom;
+  position: relative;
+}
+
+.awards-carousel-container:active {
+  cursor: grabbing !important;
+}
+
+/* Smooth transition for better swipe feedback */
+.wgh-slider__container {
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Prevent text selection during swipe */
+.wgh-slider-item-figure__caption,
+.wgh-slider-item-figure__image {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  pointer-events: none;
+}
+
+/* Re-enable pointer events for links after swipe */
+.wgh-slider-item-figure__caption a {
+  pointer-events: auto;
+}
+
+/* Add subtle hover feedback for desktop */
+@media (hover: hover) {
+  .awards-carousel-container:hover {
+    cursor: grab;
+  }
+  
+  .awards-carousel-container:hover::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    right: 20px;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(21, 40, 58, 0.1) 25%,
+      rgba(21, 40, 58, 0.2) 50%,
+      rgba(21, 40, 58, 0.1) 75%,
+      transparent 100%
+    );
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  .awards-carousel-container:hover::after {
+    opacity: 1;
+  }
+}
+
+/* Improve touch responsiveness on mobile */
+@media (max-width: 768px) {
+  .awards-carousel-container {
+    touch-action: manipulation;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .wgh-slider__container {
+    transition: transform 0.3s ease-out;
+  }
+}
+
+/* Add visual feedback for active state */
+.awards-carousel-container.swiping {
+  cursor: grabbing !important;
+}
+
+.awards-carousel-container.swiping .wgh-slider__container {
+  transition: none;
+}
