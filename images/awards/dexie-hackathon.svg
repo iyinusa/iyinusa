@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
-  <rect width="120" height="120" fill="#3182ce" rx="60"/>
-  <g transform="translate(20, 20)" fill="white">
-    <path d="M35 20L45 35H25L35 20Z"/>
-    <rect x="30" y="35" width="10" height="40" rx="2"/>
-    <circle cx="35" cy="80" r="8"/>
-    <text x="35" y="50" text-anchor="middle" font-size="8" font-weight="bold">3rd</text>
-  </g>
-</svg>
