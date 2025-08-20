@@ -1675,6 +1675,20 @@ input.wgh-slider-target {
   border-radius: 15px;
 }
 
+.wgh-slider-item-figure__year {
+  position: absolute;
+  display: block;
+  overflow: hidden;
+  right: 10px;
+  top: 10px;
+  color: #fff;
+  padding: 5px 15px;
+  background-image: linear-gradient(-45deg, #000 0%, transparent 100%);
+  border-radius: 15px;
+  font-weight: bold;
+  z-index: 2;
+}
+
 .wgh-slider-item-figure__caption {
   position: absolute;
   display: block;
@@ -1727,6 +1741,12 @@ input.wgh-slider-target {
 }
 
 @media(max-width: 480px) {
+  .wgh-slider-item-figure__year {
+    right: 5px;
+    top: 5px;
+    font-size: 10px;
+  }
+
   .wgh-slider-item-figure__caption {
     padding: 10px;
   }
