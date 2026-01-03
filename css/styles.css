@@ -774,6 +774,10 @@ body {
   color: var(--blue-primary);
 }
 
+.project-placeholder img {
+  width: 100%;
+}
+
 .project-content {
   padding: 2rem;
 }
